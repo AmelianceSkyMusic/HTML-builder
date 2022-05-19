@@ -1,3 +1,5 @@
+// RUN: node 02-write-file
+
 const process = require('process');
 const {stdin, exit} = require('process');
 const fs = require('fs');

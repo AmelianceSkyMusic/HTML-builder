@@ -1,3 +1,5 @@
+// RUN: node 01-read-file
+
 const path = require('path');
 
 const fs = require('fs');
