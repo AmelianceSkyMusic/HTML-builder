@@ -8,7 +8,7 @@ const { pipeline } = require('node:stream/promises');
 
 async function makeBundleCSSS(dirPath, banleFilePath) {
   const dirListNames = await fsPromises.readdir(dirPath);
-  fs.createWriteStream(banleFilePath).close(); // clean file
+  fsPromises.unlink(banleFilePath).catch(() => {});
 
   for (const elem of dirListNames) {
 
@@ -20,8 +20,8 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
     if (stats.isFile() && path.parse(filePath).ext === '.css') {
       const readStream = fs.createReadStream(filePath, 'utf-8');
       const fileWriteStream = fs.createWriteStream(banleFilePath, {flags: 'a'});
-      readStream.on('open', () => console.log('>> Start read:', path.parse(filePath).base));
-      readStream.on('close', () => console.log('   End read'));
+      readStream.on('open', () => console.log('>> Start reading:', path.parse(filePath).base));
+      readStream.on('close', () => console.log('   End reading'));
       readStream.on('data', (chunk) => {
         process.stdout.clearLine();
         process.stdout.cursorTo(0);
@@ -29,8 +29,8 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
         process.stdout.write(`   ${writeSize} / ${fileSize}\n`);
       });
 
-      fileWriteStream.on('open', () => {log('   Start write');});
-      fileWriteStream.on('close', () => {log('<< End write\n');});
+      fileWriteStream.on('open', () => {log('   Start writing');});
+      fileWriteStream.on('close', () => {log('<< End writing\n');});
 
       await pipeline (
         readStream,
@@ -38,7 +38,7 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
         .catch(err => console.log(err));
     }
   }
-  log('DONE');
+  log(`Created: ${path.parse(banleFilePath).base}`);
 }
 
 const currentDid = path.join(__dirname, 'styles');
