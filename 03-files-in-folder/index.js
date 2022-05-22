@@ -14,7 +14,7 @@ directory
       fs.stat(filePath, (err, stats) => {
         if (err) console.log(err);
         if (stats.isFile()) {
-          console.log(`${path.parse(elem).name} - ${path.extname(elem).replace('.', '')} - ${(stats.size/1024).toFixed(3)}kb`);
+          console.log(`${path.parse(elem).name} - ${path.extname(elem).replace('.', '')} - ${(stats.size/1024).toFixed(3)}KB`);
         }
       });
     }
