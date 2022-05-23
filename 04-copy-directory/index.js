@@ -9,8 +9,7 @@ async function copyDir (dirPath, copiedDirPath) {
 
   if (!copiedDirPath) copiedDirPath = path.resolve(parentDir, dir + '-copy');
 
-  await fsPromises.rm(copiedDirPath,  {recursive: true, force: true})
-    .catch(() => {});
+  await fsPromises.rm(copiedDirPath, {recursive: true, force: true}).catch(() => {});
 
   await fsPromises.mkdir(copiedDirPath, {recursive: true})
     .catch((err) => {console.log('Opss! Here is an Error 00002:', err);});
@@ -36,4 +35,4 @@ async function copyDir (dirPath, copiedDirPath) {
   return;
 }
 
-copyDir(path.join(__dirname, 'files'), path.join(__dirname, '..', 'FOLDER'));
+copyDir(path.join(__dirname, 'files'));
