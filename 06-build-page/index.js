@@ -32,7 +32,7 @@ async function combineHtml(dirPath) {
       const htmlFileComponent = `${found.toString().slice(2, -2)}.html`;
       const htmlComponentPath = path.join(dirPath, 'components', htmlFileComponent);
       const htmlComponent = await fsPromises.readFile(htmlComponentPath, 'utf8');
-      line = htmlComponent;
+      line = line.replace(found, htmlComponent);
       log(`   Insert: ${htmlFileComponent}`);
     }
 
