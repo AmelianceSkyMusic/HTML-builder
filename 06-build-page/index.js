@@ -14,7 +14,7 @@ const { pipeline } = require('node:stream/promises');
 // >----------------------------------------------------------------<
 
 async function combineHtml(dirPath) {
-  log('Start creating');
+  log('>> Start combining html');
   const projectDist = path.join(dirPath, 'project-dist');
   await fsPromises.rm(projectDist,  {recursive: true, force: true})
   // .then(() => {console.log('Old folder was removed');})
@@ -28,14 +28,16 @@ async function combineHtml(dirPath) {
     let line = string;
 
     if (found) {
-      const htmlComponentPath = path.join(dirPath, 'components', `${found.toString().slice(2, -2)}.html`);
+      const htmlFileComponent = `${found.toString().slice(2, -2)}.html`;
+      const htmlComponentPath = path.join(dirPath, 'components', htmlFileComponent);
       const htmlComponent = await fsPromises.readFile(htmlComponentPath, 'utf8');
       line = htmlComponent;
+      log(`   Insert: ${htmlFileComponent}`);
     }
 
     fsPromises.appendFile(path.join(projectDist, 'index.html'), line);
   }
-
+  log('<< Created: index.html\n-----------------------------');
 }
 
 
@@ -118,9 +120,7 @@ async function copyDir (dirPath, copiedDirPath) {
           });
       }
     })
-  // .then(() => {console.log('Files was copied');})
     .catch((err) => {console.log('Opss! Here is an Error 00003:', err);});
-  return;
 }
 
 
@@ -130,14 +130,14 @@ async function copyDir (dirPath, copiedDirPath) {
 // >                         CREATE PROJECT                         <
 // >----------------------------------------------------------------<
 
-combineHtml(path.join(__dirname))
-  .then(() => {
+async function createProject(dir) {
+  await combineHtml(path.join(dir));
 
-    const currentStyleDid = path.join(__dirname, 'styles');
-    const targetStyleFile = path.join(__dirname, 'project-dist', 'style.css');
+  const currentStyleDid = path.join(dir, 'styles');
+  const targetStyleFile = path.join(dir, 'project-dist', 'style.css');
+  await makeBundleCSSS(currentStyleDid, targetStyleFile);
 
-    makeBundleCSSS(currentStyleDid, targetStyleFile);
-  })
-  .then(() => {
-    copyDir(path.join(__dirname, 'assets'), path.join(__dirname, 'project-dist', 'assets'));
-  });
+  await copyDir(path.join(dir, 'assets'), path.join(dir, 'project-dist', 'assets'));
+}
+
+createProject(__dirname);
