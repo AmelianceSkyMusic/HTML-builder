@@ -10,11 +10,9 @@ async function copyDir (dirPath, copiedDirPath) {
   if (!copiedDirPath) copiedDirPath = path.resolve(parentDir, dir + '-copy');
 
   await fsPromises.rm(copiedDirPath,  {recursive: true, force: true})
-    // .then(() => {console.log('Old folder was removed');})
     .catch(() => {});
 
   await fsPromises.mkdir(copiedDirPath, {recursive: true})
-    // .then(() => {console.log('Folder was created');})
     .catch((err) => {console.log('Opss! Here is an Error 00002:', err);});
 
   await fsPromises.readdir(dirPath)
@@ -34,7 +32,6 @@ async function copyDir (dirPath, copiedDirPath) {
           });
       }
     })
-    // .then(() => {console.log('Files was copied');})
     .catch((err) => {console.log('Opss! Here is an Error 00003:', err);});
   return;
 }

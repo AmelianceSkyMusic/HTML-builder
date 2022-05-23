@@ -16,9 +16,10 @@ const { pipeline } = require('node:stream/promises');
 async function combineHtml(dirPath) {
   log('>> Start combining html');
   const projectDist = path.join(dirPath, 'project-dist');
+
   await fsPromises.rm(projectDist,  {recursive: true, force: true})
-  // .then(() => {console.log('Old folder was removed');})
     .catch(() => {});
+
   await fsPromises.mkdir(projectDist, {recursive: true});
   const file = await fsPromises.readFile(path.join(dirPath, 'template.html'), 'utf8');
   const fileStrings = file.split('\n');
@@ -51,7 +52,7 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
   const dirListNames = await fsPromises.readdir(dirPath);
   fsPromises.unlink(banleFilePath).catch(() => {});
 
-  for (const elem of dirListNames) {
+  for (const elem of dirListNames.reverse()) {
 
     const filePath = path.join(dirPath, elem);
     const stats = await fsPromises.stat(filePath);
