@@ -10,7 +10,7 @@ const fileWriteStream = fs.createWriteStream(filePath, 'utf-8');
 
 console.log('\n-----------------------------------\n! H e l l o ,  M y  S t u d e n t !\n-----------------------------------\n\nPlease, enter your passwords:');
 stdin.on('data', (message) => {
-  const msg = message.toString();
+  const msg = message.toString().trim();
   if (msg === 'exit') exit();
   fileWriteStream.write(message.toString());
 });
