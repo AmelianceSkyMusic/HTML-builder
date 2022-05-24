@@ -1,4 +1,11 @@
-// RUN: node 06-build-page
+
+
+
+
+
+
+
+
 
 
 
@@ -16,6 +23,18 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// RUN: node 06-build-page
 
 const fs = require('fs');
 const fsPromises = require('fs/promises');
@@ -69,7 +88,7 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
   const dirListNames = await fsPromises.readdir(dirPath);
   fsPromises.unlink(banleFilePath).catch(() => {});
 
-  for (const elem of dirListNames.reverse()) {
+  for (const elem of dirListNames) {
 
     const filePath = path.join(dirPath, elem);
     const stats = await fsPromises.stat(filePath);
@@ -77,7 +96,7 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
     let writeSize = 0;
 
     if (stats.isFile() && path.parse(filePath).ext === '.css') {
-
+      fsPromises.appendFile(filePath, '\n\n');
       const readStream = fs.createReadStream(filePath, 'utf-8');
       const fileWriteStream = fs.createWriteStream(banleFilePath, {flags: 'a'});
       readStream.on('open', () => console.log('>> Start reading:', path.parse(filePath).base));
