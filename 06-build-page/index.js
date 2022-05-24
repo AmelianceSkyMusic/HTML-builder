@@ -1,39 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ЕСЛИ ЕСТЬ ВОЗМОЖНОСТЬ, ЗАЙДИТЕ, ПОЖАЛУЙСТА ЧЕРЕЗ ЧАСИК
-// А ПОКА МОЖЕТЕ ПОПРОБОВАТЬ МОЙ ФОРМУ ДЛЯ КРОСЧЕКА
-// https://discord.com/channels/516715744646660106/869435851187306556/978603167812046888
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // RUN: node 06-build-page
 
 const fs = require('fs');
@@ -72,7 +36,7 @@ async function combineHtml(dirPath) {
       log(`   Insert: ${htmlFileComponent}`);
     }
 
-    fsPromises.appendFile(path.join(projectDist, 'index.html'), line);
+    await fsPromises.appendFile(path.join(projectDist, 'index.html'), line);
   }
   log('<< Created: index.html\n-----------------------------');
 }
@@ -88,7 +52,7 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
   const dirListNames = await fsPromises.readdir(dirPath);
   fsPromises.unlink(banleFilePath).catch(() => {});
 
-  for (const elem of dirListNames) {
+  for (const elem of dirListNames.reverse()) {
 
     const filePath = path.join(dirPath, elem);
     const stats = await fsPromises.stat(filePath);
@@ -133,11 +97,9 @@ async function copyDir (dirPath, copiedDirPath) {
   if (!copiedDirPath) copiedDirPath = path.resolve(parentDir, dir + '-copy');
 
   await fsPromises.rm(copiedDirPath,  {recursive: true, force: true})
-  // .then(() => {console.log('Old folder was removed');})
     .catch(() => {});
 
   await fsPromises.mkdir(copiedDirPath, {recursive: true})
-  // .then(() => {console.log('Folder was created');})
     .catch((err) => {console.log('Opss! Here is an Error 00002:', err);});
 
   await fsPromises.readdir(dirPath)
