@@ -18,6 +18,7 @@ async function makeBundleCSSS(dirPath, banleFilePath) {
     let writeSize = 0;
 
     if (stats.isFile() && path.parse(filePath).ext === '.css') {
+      fsPromises.appendFile(filePath, '\n\n');
       const readStream = fs.createReadStream(filePath, 'utf-8');
       const fileWriteStream = fs.createWriteStream(banleFilePath, {flags: 'a'});
       readStream.on('open', () => console.log('>> Start reading:', path.parse(filePath).base));
